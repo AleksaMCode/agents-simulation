@@ -109,7 +109,9 @@ element | probability | normalized probability | cumulative probability
 Sum of all probabilities is 2.5, which is not in range [0,1]. Because of that we must normalize probabilities. The reason why we don't change our energie values, is because energies in this project are in range [0,+∞). We only use the normalized energies to calculate  fitness or cumulative probability. The cumulative probability is defined as the sum of all the probabilities up to that point. Now, we create a random value between 0 and 1. If it lies between 0 and 0.04, you've picked an element 0. If it lies between 0.04 and 0.24, you've picked and element 1, and so on.
 In our project we pick a random value based on the fitness when we pick out agents for reproduction. The picking is done in a method called `ChooseParent`.
 
-## Usage	
+## Usage
+## Technologies
+The project is written in Java and it requires JRE 8 to run. It was developed in Eclipse IDE 2020-06 (4.16.0). Also, this project uses Spark's Java API.
 
 ## To-Do List
 - [ ] Replace in memory agent collection with a csv file on hdfs.
