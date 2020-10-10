@@ -18,4 +18,5 @@ Type | Description
 Type-1 | Two identical agents are created (agents with same Genes (Energy and Aggressiveness)) based on the selected agent.
 Type-2 | Chosen agent is copied in to two new agents with the same Genes. One of the Genes, Energy or Aggressiveness, chosen randomly, is mutated with a `mutationRate` probability with respects to its allowed intervals.
 Type-3 | Two agents are chosen and their Genes are randomly combined.
+
 These reproduction option are used when variable `crossoverOption` is set to 1, 2 or 3, respectively. There is also a 4th way of reproduction (comined reproduction) which is used when `crossoverOption` is set to -1. Each time a reprocustion occurs, the way of reproducing is chosen randomly between the 3 types.
