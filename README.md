@@ -19,8 +19,6 @@ Type-1 | Two identical agents are created (agents with same Genes (Energy and Ag
 Type-2 | Chosen agent is copied in to two new agents with the same Genes. One of the Genes, Energy or Aggressiveness, chosen randomly, is mutated with a `mutationRate` probability with respects to its allowed intervals.
 Type-3 | Two agents are chosen and their Genes are randomly combined.
 
-These reproduction option are used when variable `crossoverOption` is set to 1, 2 or 3, respectively. There is also a 4th way of reproduction (comined reproduction) which is used when `crossoverOption` is set to -1. Each time a new generation is created, the way of reproducing is chosen randomly between the 3 types.
-
 ## Implementation
 ### Population RDD
 Population, or the agent collection, is 'stored' inside of an JavaPairRDD where **key** is an Integer which represents an agent index in population and **value** is a scala Tuple2 which holds two double values, Energy and Aggressiveness.
@@ -52,14 +50,20 @@ Finally we need to add the new energy value to the old energy of an agent.
 * Finally, we map everything to the initial form of `PopulationRdd`.
 ```java
 PopulationRdd = PopulationRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._2._1), x._2._2))
-							.union(twoAgentsRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._2._1), x._2._2)))
-							.reduceByKey((x, y) -> x + y)
-							.mapToPair(x -> new Tuple2<>(x._1._1, new Tuple2<>(x._1._2, x._2)));
+			     .union(twoAgentsRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._2._1), x._2._2)))
+			     .reduceByKey((x, y) -> x + y)
+			     .mapToPair(x -> new Tuple2<>(x._1._1, new Tuple2<>(x._1._2, x._2)));
 ```
-### Fitness
-````java
-if (a == 1)
-````
+### Reproduction
+Reproduction is implemented in *NewGeneration* function. Before creating new agents we need to normalize and create culmulative probability in *Normalization* function. After that we chooise, with a probability of a choose, unique indexes from the population and store in `smithIndex` list, after which we create a pair RDD called `smithRdd` which only contains agents with indexes from a list `smithIndex`. We do this by filtering out the values we need from `populationWithFitnessRdd`. `populationWithFitnessRdd` is the same as `PopulationRdd` just with an 'extra fieled' containing the fitness value (instead of the scala's Tuple2 as **value** we now use Tuple3).
+```java
+JavaPairRDD<Integer, Tuple2<Double, Double>> smithRdd = populationWithFitnessRdd
+		.filter(value -> smithIndex.contains(value._1) ? true : false)
+		.mapToPair(value -> new Tuple2<>(value._1, new Tuple2<>(value._2._1(), value._2._2())));
+```
+After that, we create a new population containg the genes of the selected agents. Reproduction types are stored in a variable `crossoverOption` as 1, 2 or 3, respectively. There is also a 4th way of reproduction (combined reproduction) which is used when `crossoverOption` is set to -1. Each time a new generation is created, the way of reproducing is chosen randomly between the 3 types.
+### Normalization
+
 ## Usage
 
 ## To-Do List
