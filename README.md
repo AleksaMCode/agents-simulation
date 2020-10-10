@@ -15,7 +15,7 @@ Every epoch consist of an `iterationNumber` iterations. During iteration agents 
 Agents are chosen randomly (total number of agents for reproduction is set in variable `numberOfAgents`), with a probability of choice being proportional to their energies. This is accomplished with cumulative probabilities, or fitness as it is referred to in this project. There are 3 ways of reproduction.
 Type | Description
 ------------ | -------------
-Type-1 | Two identical agents are created (agents with same Genes (Energy and Aggressiveness)) based on the selected agent.
+Type-1 | Two identical agents are created (agents with same Genes (Energy and Aggressiveness) based on the selected agent.
 Type-2 | Chosen agent is copied in to two new agents with the same Genes. One of the Genes, Energy or Aggressiveness, chosen randomly, is mutated with a `mutationRate` probability with respects to its allowed intervals.
 Type-3 | Two agents are chosen and their Genes are randomly combined.
 
