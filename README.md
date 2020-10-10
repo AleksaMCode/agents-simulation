@@ -20,3 +20,6 @@ Type-2 | Chosen agent is copied in to two new agents with the same Genes. One of
 Type-3 | Two agents are chosen and their Genes are randomly combined.
 
 These reproduction option are used when variable `crossoverOption` is set to 1, 2 or 3, respectively. There is also a 4th way of reproduction (comined reproduction) which is used when `crossoverOption` is set to -1. Each time a reprocustion occurs, the way of reproducing is chosen randomly between the 3 types.
+
+## To-Do List
+- [ ] Replace in memory agent collection with a csv file on hdfs.
