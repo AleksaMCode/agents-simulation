@@ -3,7 +3,7 @@
 ## Description
 The task was to create a distributed implementation of [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) that would simulate agents interactions. Agents are a simple organisms with a predefined behaviour. They interract inside one epoch and based on the predifined selection rules at the end of an epoch we choose the fittest agents to continue the simulation in the next epoch.
 ### Agents
-At the start of the simulation, agents are given pseudo-random values for energy and aggressiveness properties in a range [0,1].
+At the start of the simulation, agents are given pseudo-random values for energy and aggressiveness.
 Characteristics | Description
 ------------ | -------------
 Energy | It is used as to calculate the fitness of an agent. Energy can be a positive value in a range [0,+∞) with respect to the maximum value of double. Higher the energy value of an agent, greater the chance of agents reproduction at the end of an epoch. Energy is increased with each interraction.
