@@ -31,7 +31,7 @@ After we calculate the total amount of aggressiveness. We do this by mapping the
 ```java
 double totalAggressiveness = twoAgentsRdd.map(x -> x._2._1).reduce((x, y) -> x + y);
 ```
-We use the `totalAggressiveness` variable to create an energy split between the two agents. As stated above, aggressiveness is used to distributed predefined energy value to two agents. Then we proceed by mapping `twoAgentsRdd` into a pair RDD while keepeing track of the *index*, *aggressiveness* and the *energy split* value. Energy split value is calculated as ![energySplit](http://www.sciweavers.org/upload/Tex2Img_1602346910/render.png).
+We use the `totalAggressiveness` variable to create an energy split between the two agents. As stated above, aggressiveness is used to distributed predefined energy value to two agents. Then we proceed by mapping `twoAgentsRdd` into a pair RDD while keepeing track of the *index*, *aggressiveness* and the *energy split* value. Energy split value is calculated as ![energySplit](https://raw.githubusercontent.com/AleksaMCode/agents-simulation/main/agents-gen-algo/src/main/resources/energySplit.png?token=AFQO6V5QIU2LW4N7YP5ZRUS7QMI5S).
 ```java
 twoAgentsRdd.mapToPair(value -> new Tuple2<>(value._1,new Tuple2<>(value._2._1, collisionEnergy * value._2._1 / totalAggressiveness)))
 ```
