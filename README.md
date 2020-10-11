@@ -63,7 +63,7 @@ JavaPairRDD<Integer, Tuple2<Double, Double>> smithRdd = populationWithFitnessRdd
 ```
 After that, we create a new population containg the genes of the selected agents. Reproduction types are stored in a variable `crossoverOption` as 1, 2 or 3, respectively. There is also a 4th way of reproduction (combined reproduction) which is used when `crossoverOption` is set to -1. Each time a new generation is created, the way of reproducing is chosen randomly between the 3 types.
 ### Normalization
-First we calculate the total amount of energy. We do this by mapping the `PopulationRdd` into a RDD that contains only energy values and then we reduce it to a single, double value, by adding all of the energy values. We will use `totalEnergy` to calculate normalized energy. Normalized energy is calculated by dividing the orignal energy with a total amount of energy. Sum of all normalized energies must equal 1.
+First we calculate the total amount of energy. We do this by mapping the `PopulationRdd` into a RDD that contains only energy values and then we reduce it to a single, double value, by adding all of the energy values. We will use `totalEnergy` to calculate normalized energy. Normalized energy is calculated by dividing the orignal energy with a total amount of energy. Sum of all normalized energies must be equal to 1.
 ```java
 double totalEnergy = PopulationRdd.map(x -> x._2._2).reduce((x, y) -> x + y);
 ```
