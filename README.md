@@ -12,7 +12,7 @@ Fitness | Fitness represents a probability ([cumulative probability](https://en.
 ### Epoch
 Every epoch consist of an `iterationNumber` iterations. During iteration agents are paired randomly for interactions. Every agent must be paired. In case of an odd number of agents, one of the agents, chosen randomly, will interact  twice during the iteration. Epoch ends when all the iterations are completed. At the end of each epoch, `numberOfAgents` agents is chosen whose genes will be used to create new agents for the next epoch. Similar problem is explained [here](https://www.youtube.com/watch?v=YNMkADpvO4w).
 ### Reproduction
-Agents are chosen randomly (total number of agents for reproduction is set in variable `numberOfAgents`), with a probability of choice being proportional to their energies. This is accomplished with cumulative probabilities, or fitness as it is referred to in this project. There are 3 ways of reproduction.
+Agents are chosen randomly (total number of agents for reproduction is set in variable `numberOfAgents`, with a probability of choice being proportional to their energies. This is accomplished with cumulative probabilities, or fitness as it is referred to in this project. There are 3 ways of reproduction.
 Type | Description
 ------------ | -------------
 Type-1 | Two identical agents are created (agents with same Genes, Energy and Aggressiveness) based on the selected agent.
