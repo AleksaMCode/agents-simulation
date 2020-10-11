@@ -97,7 +97,7 @@ populationWithFitnessRdd = populationWithFitnessRdd
 				.mapToPair(value -> new Tuple2<>(value._1._1(), new Tuple4<>(value._1._2(), value._1._3(), value._1._4(), value._2)))
 				.sortByKey();
 ```
-Here is a simple example of how to create a table whicjh will help us in picking a random value based on probability.
+Here is a simple example of how to create a table which will help us pick a random element based on probability.
 element | probability | normalized probability | cumulative probability
 ------------ | ------------- | ------------- | -------------
 0 | 0.1 | 0.04 | 0.04
