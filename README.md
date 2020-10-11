@@ -128,5 +128,7 @@ exit | exit - cause console termination | **exit** | This command terminates the
 ## Technologies
 The project is written in Java and it requires JRE 8 to run. It was developed in Eclipse IDE 2020-06 (4.16.0). Also, this project uses Spark's Java API.
 
+## Screenshots
+
 ## To-Do List
 - [ ] Replace in memory agent collection with a csv file on hdfs.
