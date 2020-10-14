@@ -55,7 +55,7 @@ PopulationRdd = PopulationRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._
 			     .mapToPair(x -> new Tuple2<>(x._1._1, new Tuple2<>(x._1._2, x._2)));
 ```
 ### Reproduction
-Reproduction is implemented in *NewGeneration* method. Before creating new agents we need to normalize and create culmulative probability in *Normalization* method. After that we chooise, with a probability of a choose, unique indexes from the population and store in `smithIndex` list, after which we create a pair RDD called `smithRdd` which only contains agents with indexes from a list `smithIndex`. We do this by filtering out the values we need from `populationWithFitnessRdd`. `populationWithFitnessRdd` is the same as `PopulationRdd` just with an 'extra fieled' containing the fitness value (instead of the scala's Tuple2 as **value** we now use Tuple3).
+Reproduction is implemented in *NewGeneration* method. Before creating new agents we need to normalize and create culmulative probability in *Normalization* method. After that we chooise, with a probability of a choose, unique indexes from the population and store in `smithIndex` list, after which we create a pair RDD called `smithRdd` which only contains agents with indexes from a list `smithIndex`. We do this by filtering out the values we need from `populationWithFitnessRdd`. `populationWithFitnessRdd` is the same as `PopulationRdd` just with an 'extra field' containing the fitness value (instead of the scala's Tuple2 as **value** we now use Tuple3).
 ```java
 JavaPairRDD<Integer, Tuple2<Double, Double>> smithRdd = populationWithFitnessRdd
 		.filter(value -> smithIndex.contains(value._1) ? true : false)
