@@ -123,7 +123,7 @@ add 2 | add - adds more agents to the simulation. | **add** sim_number **-n** nu
 add 3 | add - adds more agents to the simulation. | **add** sim_number **-n** number_of_agents **-pr** energy_lowerlimit energy_upperlimit  aggressiveness_lowerlimit aggressiveness_upperlimit | This commands adds more agents to the to the already created, finished, simulation. Agents will have same energy and aggressiveness ranges, but their energy and aggressiveness values will be chosen randomly from defined range. | **-pr** (parametar range) after this flag we set energy and aggressiveness range values, respectively.
 list | list - shows a list of simulations. | **list** | This command shows a list of simulations. For every simulation it displays its number, generation number, number of agents used for reproduction. If simulation is not over it will display a message "Simulation is not over.", otherwise it will show first 50 agents in a population. | x
 run | run - restarts a simulation. | **run** sim_number | This command restarts a simulation, by increasing the epoch number by the original epoch number. This can only be done for a simulation that exists, and is not currently runnnig. | x
-exit | exit - cause console termination | **exit** | This command terminates the running program. | x
+exit | exit - causes console termination | **exit** | This command terminates the running program. | x
 
 ## Technologies
 The project is written in Java and it requires JRE 8 to run. It was developed in Eclipse IDE 2020-06 (4.16.0). Also, this project uses Spark's Java API.
@@ -133,4 +133,5 @@ The project is written in Java and it requires JRE 8 to run. It was developed in
 ## To-Do List
 - [ ] Replace in memory agent collection with a csv file on hdfs.
 - [ ] Parallelise code where possible.
-- [ ] Create responsive UI with (possible c# frontend implementation)
+- [ ] Create responsive UI with (possible c# frontend implementation).
+- [ ] In addition to simulation continuation option, simulation parameters should be made changeable.
