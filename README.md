@@ -7,12 +7,12 @@ At the start of the simulation, agents are given pseudo-random values for energy
 Characteristics | Description
 ------------ | -------------
 Energy | It is used as to calculate the fitness of an agent. Energy can be a positive value in a range [0,+∞) with respect to the maximum value of double. Higher the energy value of an agent, greater the chance of agents reproduction at the end of an epoch. Energy is increased with each interraction.
-Aggressiveness | Is used to determine the ratio of distribution of energy to the two agents during interaction. Aggressiveness can only have values in a range [0,1]. Every interaction introduces const. predefined energy value to the simulation, which is than distributed between two agents with respects to their aggressiveness values. Before adding the new energy values to the agents, energy is scaled according to this formula ![scaling_equation](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/scaling_equation.png?raw=true), </br>where ![sigmoid](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/sigmoid.png?raw=true) and ![a_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/a_i.png?raw=true) is agents aggressiveness value. Koeficients ![k_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/k_i.png?raw=true) and ![c_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/c_i.png?raw=true) are simulation parameters.
+Aggressiveness | Is used to determine the ratio of distribution of energy to the two agents during interaction. Aggressiveness can only have values in a range [0,1]. Every interaction introduces constant, predefined, energy value to the simulation, which is then distributed between two agents with respects to their aggressiveness values. Before adding the new energy values to the agents, energy is scaled according to this formula ![scaling_equation](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/scaling_equation.png?raw=true), </br>where ![sigmoid](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/sigmoid.png?raw=true) and ![a_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/a_i.png?raw=true) is agents aggressiveness value. Koeficients ![k_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/k_i.png?raw=true) and ![c_i](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/c_i.png?raw=true) are simulation parameters.
 Fitness | Fitness represents a probability ([cumulative probability](https://en.wikipedia.org/wiki/Cumulative_distribution_function)) of agents reproduction at the end of an epoch. It's calculated based on the energy of the agents in the simulation. It has to be proportionate to all the other fitness levels in the simulation. When calculating cumulative probability sum of all probabilities must equal 1.
 ### Epoch
 Every epoch consist of an `iterationNumber` iterations. During iteration agents are paired randomly for interactions. Every agent must be paired. In case of an odd number of agents, one of the agents, chosen randomly, will interact  twice during the iteration. Epoch ends when all the iterations are completed. At the end of each epoch, `numberOfAgents` agents is chosen whose genes will be used to create new agents for the next epoch. Similar problem is explained [here](https://www.youtube.com/watch?v=YNMkADpvO4w).
 ### Reproduction
-Agents are chosen randomly (total number of agents for reproduction is set in variable `numberOfAgents`, with a probability of choice being proportional to their energies. This is accomplished with cumulative probabilities, or fitness as it is referred to in this project. There are 3 ways of reproduction.
+Agents are chosen randomly (total number of agents for reproduction is set in variable `numberOfAgents`), with a probability of choice being proportional to their energies. This is accomplished with cumulative probabilities, or fitness as it is referred to in this project. There are 3 ways of reproduction.
 Type | Description
 ------------ | -------------
 Type-1 | Two identical agents are created (agents with same Genes, Energy and Aggressiveness) based on the selected agent.
@@ -44,7 +44,7 @@ After that we need to combine the scaling factor with an energy split. We do tha
 .mapToPair(value -> new Tuple2<>(value._1,new Tuple2<>(value._2._1(), value._2._2() * value._2._3())))
 ```
 Finally we need to add the new energy value to the old energy of an agent.
-* Mapp the `PopulationRdd` on itself, while changing the **key** to scala Tuple, which now holds index and aggressiveness and the **value** to Double, which is now only agents energy value. We do this so we can later to reduce by key on the Pair RDD.
+* Mapp the `PopulationRdd` on itself, while changing the **key** to scala Tuple, which now holds index and aggressiveness, and the **value** to Double, which is now only agent's energy value. We do this so we can later perform reduce by key on the Pair RDD.
 * We add the `twoAgentsRdd` to the `PopulationRdd` by using `.union`.
 * We do reduction by key, while adding the values part together.
 * Finally, we map everything to the initial form of `PopulationRdd`.
@@ -63,7 +63,7 @@ JavaPairRDD<Integer, Tuple2<Double, Double>> smithRdd = populationWithFitnessRdd
 ```
 After that, we create a new population containg the genes of the selected agents. Reproduction types are stored in a variable `crossoverOption` as 1, 2 or 3, respectively. There is also a 4th way of reproduction (combined reproduction) which is used when `crossoverOption` is set to -1. Each time a new generation is created, the way of reproducing is chosen randomly between the 3 types.
 ### Normalization
-First we calculate the total amount of energy. We do this by mapping the `PopulationRdd` into a RDD that contains only energy values and then we reduce it to a single, double value, by adding all of the energy values. We will use `totalEnergy` to calculate normalized energy. Normalized energy is calculated by dividing the orignal energy with a total amount of energy. Sum of all normalized energies must be equal to 1.
+First we calculate the total amount of energy. We do this by mapping the `PopulationRdd` into an RDD that contains only energy values. Then we reduce it to a single, double value, by adding all of the energy values. We will use `totalEnergy` to calculate normalized energy. Normalized energy is calculated by dividing the orignal energy with a total amount of energy. Sum of all normalized energies must be equal to 1.
 ```java
 double totalEnergy = PopulationRdd.map(x -> x._2._2).reduce((x, y) -> x + y);
 ```
@@ -106,14 +106,14 @@ element | probability | normalized probability | cumulative probability
 3 | 0.3 | 0.12 | 0.64
 4 | 0.9 | 0.36 | 1.0
 
-Sum of all probabilities is 2.5, which is not in range [0,1]. Because of that we must normalize probabilities. The reason why we don't change our energie values, is because energies in this project are in range [0,+∞). We only use the normalized energies to calculate  fitness or cumulative probability. The cumulative probability is defined as the sum of all the probabilities up to that point. Now, we create a random value between 0 and 1. If it lies between 0 and 0.04, you've picked an element 0. If it lies between 0.04 and 0.24, you've picked and element 1, and so on.
+Sum of all probabilities is 2.5, which is not in range [0,1]. As a result we must normalize probabilities. The reason why we don't change our energy values, is because energies in this project are in range [0,+∞). We only use the normalized energies to calculate  fitness or cumulative probability. The cumulative probability is defined as the sum of all the probabilities up to that point. Now, we create a random value between 0 and 1. If it lies between 0 and 0.04, you've picked an element 0. If it lies between 0.04 and 0.24, you've picked and element 1, and so on.
 In our project we pick a random value based on the fitness when we pick out agents for reproduction. Picking is done in a method called `ChooseParent`.
 
 ## Usage
 Detailed explanation of the individual commands. 
 COMMAND | NAME | SYNOPSIS | DESCRIPTION | OPTIONS
 | --- | --- | --- | --- | :---:
-create 1 | create - creates a new simulation. | **create** | This command creates a simulation with default parameters (params set in code). | x
+create 1 | create - creates a new simulation. | **create** | This command creates a simulation with default parameters (parameters are set in code). | x
 create 2 | create - creates a new simulation. | **create** **-S** s_value **-A** a_value **-r[1\|3]** **-p** energy_value aggressiveness_value **-e** e_value **-i** i_value **-k1** k1_value **-k2** k2_value **-c1** c1_value **-c2** c2_value | This command creates a simulation with custom parameters. | **-S** sets the population size.<br/>**-A** sets the number of agents used for reproduction. (A<=S)<br/>**-r1** sets type 1 and **-r3** sets type 3 reproduction.<br/>**-p** (parameters) after this flag we set energy and aggressiveness value, respectively.<br/>**-e1** sets number of epochs.<br/>**-i** sets number of iterations per one epoch.<br/>**-k1**,**-k2**,**-c1**,**-c2** set parameters for *scaling equation*.
 create 3 | create - creates a new simulation. | **create** **-S** s_value **-A** a_value **-r[1\|3]** **-pr** energy_lowerlimit energy_upperlimit  aggressiveness_lowerlimit aggressiveness_upperlimit **-e** e_value **-i** i_value **-k1** k1_value **-k2** k2_value **-c1** c1_value **-c2** c2_value | This command created a simulation with custom parameters. | **-pr** (parametar range) after this flag we set energy and aggressiveness range values, respectively.
 create 4 | create - creates a new simulation. | **create** **-S** s_value **-A** a_value **-r2** mutation_rate **-p** energy_value aggressiveness_value **-e** e_value **-i** i_value **-k1** k1_value **-k2** k2_value **-c1** c1_value **-c2** c2_value | This command created a simulation with custom parameters. | **-r2** sets type 2 reproduction after which we enter desired mutation rate.
@@ -132,3 +132,5 @@ The project is written in Java and it requires JRE 8 to run. It was developed in
 
 ## To-Do List
 - [ ] Replace in memory agent collection with a csv file on hdfs.
+- [ ] Parallelise code where possible.
+- [ ] Create responsive UI with (possible c# frontend implementation)
