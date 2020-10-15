@@ -27,7 +27,7 @@ Collision is implemented in *SurvivalOfTheFittest* method. Two agents are chosen
 ```java
 twoAgentsRdd = populationCopyRdd.filter(value -> value._1 == agent1Indx ? true : value._1 == agent2Indx ? true : false);
 ```
-After we calculate the total amount of aggressiveness. We do this by mapping the `twoAgentsRdd` in to a rdd and then we reduce it to a single double value.
+After we calculate the total amount of aggressiveness. We do this by mapping the `twoAgentsRdd` in to a rdd and then we reduce it to a single value of type Double.
 ```java
 double totalAggressiveness = twoAgentsRdd.map(x -> x._2._1).reduce((x, y) -> x + y);
 ```
@@ -58,8 +58,8 @@ PopulationRdd = PopulationRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._
 Reproduction is implemented in *NewGeneration* method. Before creating new agents we need to normalize and create culmulative probability in *Normalization* method. After that we chooise, with a probability of a choose, unique indexes from the population and store in `smithIndex` list, after which we create a pair RDD called `smithRdd` which only contains agents with indexes from a list `smithIndex`. We do this by filtering out the values we need from `populationWithFitnessRdd`. `populationWithFitnessRdd` is the same as `PopulationRdd` just with an 'extra field' containing the fitness value (instead of the scala's Tuple2 as **value** we now use Tuple3).
 ```java
 JavaPairRDD<Integer, Tuple2<Double, Double>> smithRdd = populationWithFitnessRdd
-		.filter(value -> smithIndex.contains(value._1) ? true : false)
-		.mapToPair(value -> new Tuple2<>(value._1, new Tuple2<>(value._2._1(), value._2._2())));
+							.filter(value -> smithIndex.contains(value._1) ? true : false)
+							.mapToPair(value -> new Tuple2<>(value._1, new Tuple2<>(value._2._1(), value._2._2())));
 ```
 After that, we create a new population containg the genes of the selected agents. Reproduction types are stored in a variable `crossoverOption` as 1, 2 or 3, respectively. There is also a 4th way of reproduction (combined reproduction) which is used when `crossoverOption` is set to -1. Each time a new generation is created, the way of reproducing is chosen randomly between the 3 types.
 ### Normalization
@@ -70,23 +70,23 @@ double totalEnergy = PopulationRdd.map(x -> x._2._2).reduce((x, y) -> x + y);
 After that we create `PopulationEnergyNormalizedRdd` which is a `PopulationRdd` with an 'extra field' *energyNormalized*. The RDD is also sorted in respects to normalized energy.
 ```java
 JavaPairRDD<Integer, Tuple3<Double, Double, Double>> PopulationEnergyNormalizedRdd = PopulationRdd
-		.mapToPair(value -> new Tuple2<>(value._2._2 / totalEnergy, new Tuple3<>(value._1, value._2._1, value._2._2)))
-		.sortByKey()
-		.mapToPair(value -> new Tuple2<>(value._2._1(), new Tuple3<>(value._2._2(), value._2._3(), value._1)));
+											.mapToPair(value -> new Tuple2<>(value._2._2 / totalEnergy, new Tuple3<>(value._1, value._2._1, value._2._2)))
+											.sortByKey()
+											.mapToPair(value -> new Tuple2<>(value._2._1(), new Tuple3<>(value._2._2(), value._2._3(), value._1)));
 ```
 The normalized energy is only used to calculate fitness values, after which is deleted. The value of energy is never changed.
 The fitness (cumulative probability) is defined as the sum of all the normalized energies (probabilities) up to chosen index. Fitness for one agent is calculated by filtering out every agent with an index value that is smaller or equal to chosen index, after which we map pair RDD to a single value RDD which contains only fitness values. Then we reduce an RDD to a value of type double.
 ```java
 double fitness = populationWithFitnessRdd
-	.filter(x -> x._1 <= index ? true : false)
-	.map(x -> x._2._3())
-	.reduce((x, y) -> x + y);
+			.filter(x -> x._1 <= index ? true : false)
+			.map(x -> x._2._3())
+			.reduce((x, y) -> x + y);
 ```
 Then we create an agent with a new fitness value.
 ```java
 JavaPairRDD<Integer, Tuple4<Double, Double, Double, Double>> selectedRdd = populationWithFitnessRdd
-		.filter(value -> value._1 == index ? true : false)
-		.mapToPair(value -> new Tuple2<>(value._1, new Tuple4<>(value._2._1(), value._2._2(), value._2._3(), fitness)));
+										.filter(value -> value._1 == index ? true : false)
+										.mapToPair(value -> new Tuple2<>(value._1, new Tuple4<>(value._2._1(), value._2._2(), value._2._3(), fitness)));
 ```
 The only thing that is left to do is to add `selectedRdd` to `populationWithFitnessRdd`, after which we add the fitness values of two duplicate agents in RDD. We do that by ***reducing by key*** while adding the **values** from the reduced entries.
 ```java
