@@ -39,14 +39,14 @@ Then we calculate the scaling factor by using scaling equation we defined earlie
 ```java
 .mapToPair(value -> new Tuple2<>(value._1,new Tuple3<>(value._2._1, value._2._2,1 - (k1 * Sigmoid(c1 * (value._2._1 - k2))+ (1 - k1) * Sigmoid(c1 * (value._2._1 - k2))))))
 ```
-After that we need to combine the scaling factor with an energy split. We do that by multiplying  the two values.
+After that we need to combine the scaling factor with an energy split. We do that by multiplying the two values.
 ```java
 .mapToPair(value -> new Tuple2<>(value._1,new Tuple2<>(value._2._1(), value._2._2() * value._2._3())))
 ```
 Finally we need to add the new energy value to the old energy of an agent.
-* Mapp the `PopulationRdd` on itself, while changing the **key** to scala Tuple, which now holds index and aggressiveness, and the **value** to Double, which is now only agent's energy value. We do this so we can later perform reduce by key on the Pair RDD.
+* Mapp the `PopulationRdd` on itself, while changing the **key** to scala Tuple2, which now holds index and aggressiveness, and the **value** to Double, which is now only agent's energy value. We do this so later we can perform *reduce by key* on the Pair RDD.
 * We add the `twoAgentsRdd` to the `PopulationRdd` by using *union*.
-* We do reduction by key, while adding the values part together.
+* We then *reduce by key*, while adding the value parts together.
 * Finally, we map everything to the initial form of `PopulationRdd`.
 ```java
 PopulationRdd = PopulationRdd.mapToPair(x -> new Tuple2<>(new Tuple2<>(x._1, x._2._1), x._2._2))
@@ -133,6 +133,6 @@ The project is written in Java and it requires JRE 8 to run. It was developed in
 ## To-Do List
 - [ ] Replace in memory agent collection with a csv file on hdfs.
 - [ ] Parallelise code where possible.
-- [ ] Create responsive UI with (possible c# frontend implementation).
+- [ ] Create responsive UI (probably c# frontend implementation).
 - [ ] In addition to simulation continuation option, simulation parameters should be made changeable.
-- [ ] Fix energy scaling formula, add a missing k3 parameter to simulation and replace k2 with k3 in code where needed.
+- [ ] Fix energy scaling formula - add a missing k3 parameter to simulation and replace k2 with k3 in code where needed.
