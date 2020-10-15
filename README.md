@@ -135,3 +135,4 @@ The project is written in Java and it requires JRE 8 to run. It was developed in
 - [ ] Parallelise code where possible.
 - [ ] Create responsive UI with (possible c# frontend implementation).
 - [ ] In addition to simulation continuation option, simulation parameters should be made changeable.
+- [ ] Fix energy scaling formula, add a missing k3 parameter to simulation and replace k2 with k3 in code where needed.
