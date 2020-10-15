@@ -45,7 +45,7 @@ After that we need to combine the scaling factor with an energy split. We do tha
 ```
 Finally we need to add the new energy value to the old energy of an agent.
 * Mapp the `PopulationRdd` on itself, while changing the **key** to scala Tuple, which now holds index and aggressiveness, and the **value** to Double, which is now only agent's energy value. We do this so we can later perform reduce by key on the Pair RDD.
-* We add the `twoAgentsRdd` to the `PopulationRdd` by using `.union`.
+* We add the `twoAgentsRdd` to the `PopulationRdd` by using *union*.
 * We do reduction by key, while adding the values part together.
 * Finally, we map everything to the initial form of `PopulationRdd`.
 ```java
