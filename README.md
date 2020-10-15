@@ -33,11 +33,11 @@ double totalAggressiveness = twoAgentsRdd.map(x -> x._2._1).reduce((x, y) -> x +
 ```
 We use the `totalAggressiveness` variable to create an energy split between the two agents. As stated above, aggressiveness is used to distributed predefined energy value to two agents. Then we proceed by mapping `twoAgentsRdd` into a pair RDD while keepeing track of the *index*, *aggressiveness* and the *energy split* value. Energy split value is calculated as <br/>![energySplit](https://github.com/AleksaMCode/agents-simulation/blob/main/agents-gen-algo/src/main/resources/energySplit.png?raw=true).
 ```java
-twoAgentsRdd.mapToPair(value -> new Tuple2<>(value._1,new Tuple2<>(value._2._1, collisionEnergy * value._2._1 / totalAggressiveness)))
+twoAgentsRdd.mapToPair(value -> new Tuple2<>(value._1, new Tuple2<>(value._2._1, collisionEnergy * value._2._1 / totalAggressiveness)))
 ```
 Then we calculate the scaling factor by using scaling equation we defined earlier.
 ```java
-.mapToPair(value -> new Tuple2<>(value._1,new Tuple3<>(value._2._1, value._2._2,1 - (k1 * Sigmoid(c1 * (value._2._1 - k2))+ (1 - k1) * Sigmoid(c1 * (value._2._1 - k2))))))
+.mapToPair(value -> new Tuple2<>(value._1, new Tuple3<>(value._2._1, value._2._2,1 - (k1 * Sigmoid(c1 * (value._2._1 - k2))+ (1 - k1) * Sigmoid(c1 * (value._2._1 - k2))))))
 ```
 After that we need to combine the scaling factor with an energy split. We do that by multiplying the two values.
 ```java
