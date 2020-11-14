@@ -1,5 +1,5 @@
 # Agents simulation
-**Selected Chapters from Operating System** course project, as taught at the **Faculty of Electrical Engineering Banja Luka**.
+*Selected Chapters from Operating System* course project, as taught at the **Faculty of Electrical Engineering Banja Luka**.
 ## Description
 The task was to create a distributed implementation of [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm) that would simulate agents interactions. Agents are a simple organisms with a predefined behaviour. They interract inside one epoch and based on the predifined selection rules at the end of an epoch we choose the fittest agents to continue the simulation in the next epoch.
 ### Agents
