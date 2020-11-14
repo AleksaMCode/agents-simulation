@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\agents-gen-algo",
+    "\\agents-gen-algo\\.settings",
+    "\\agents-gen-algo\\src",
+    "\\agents-gen-algo\\target"
   ],
+  "SelectedNode": "\\agents-gen-algo\\.classpath",
   "PreviewInSolutionExplorer": false
 }
